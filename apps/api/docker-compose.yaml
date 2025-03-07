@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+  api:
+    build: .
+    container_name: gym_api
+    ports:
+      - "3005:3005"
+    volumes:
+      - .:/app
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=sqlite:///app/db.sqlite
+    depends_on:
+      - sqlite
+
+  sqlite:
+    image: nouchka/sqlite3
+    container_name: my_sqlite
+    volumes:
+      - ./data:/root/db

@@ -1,7 +1,8 @@
 import { json, urlencoded } from "body-parser";
+import cors from "cors";
 import express, { type Express } from "express";
 import morgan from "morgan";
-import cors from "cors";
+import userRouter from "./modules/usuario/user.controller";
 
 export const createServer = (): Express => {
   const app = express();
@@ -10,13 +11,9 @@ export const createServer = (): Express => {
     .use(morgan("dev"))
     .use(urlencoded({ extended: true }))
     .use(json())
-    .use(cors())
-    .get("/message/:name", (req, res) => {
-      return res.json({ message: `hello ${req.params.name}` });
-    })
-    .get("/status", (_, res) => {
-      return res.json({ ok: true });
-    });
+    .use(cors());
+
+  app.use("/users", userRouter);
 
   return app;
 };
