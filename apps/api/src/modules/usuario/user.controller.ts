@@ -9,6 +9,7 @@ import { UserService } from "./user.service";
 // Ajuste o caminho conforme necessário
 
 const userRouter = Router();
+const rote = Router();
 
 // Função do controller para inserir usuário
 const createUser = async (

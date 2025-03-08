@@ -33,8 +33,14 @@ export class AuthService {
       usuario: existingUser,
       expiracaoToken: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
     };
-    const userTokenRefresh =
-      await this.authRepository.createUserToken(userToken);
+    let userTokenRefresh = null;
+    const refreshTokenExists =
+      await this.authRepository.findUserTokenByUserId(existingUser);
+    if (refreshTokenExists) {
+      userTokenRefresh = await this.authRepository.updateUserToken(userToken);
+    } else {
+      userTokenRefresh = await this.authRepository.createUserToken(userToken);
+    }
 
     return new ReturnAuthDto(generateToken(existingUser), userTokenRefresh);
   }
@@ -70,6 +76,14 @@ export class AuthService {
 
   async findUserTokenByRefreshToken(refreshToken: string): Promise<UserToken> {
     return await this.authRepository.findUserTokenByRefreshToken(refreshToken);
+  }
+
+  async deleteUserTokenByIdUser(idUsuario: string): Promise<any> {
+    const user = await this.userService.findUserById(idUsuario);
+    if (!user) {
+      return new NotFoundException("Usuário náo localizado");
+    }
+    return this.authRepository.deleteUserTokenByIdUser(user.id);
   }
 
   private verifyRefreshTokenIsValid(expiraToken: Date): boolean {
