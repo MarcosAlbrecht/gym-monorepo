@@ -20,24 +20,7 @@ export const generateToken = (user: User): string => {
     PASSWORD_JWT,
     {
       subject: String(user.id),
-      expiresIn: "60s",
-    }
-  );
-};
-
-// Função para gerar o Refresh Token
-export const generateRefreshToken = (user: User): string => {
-  return sign(
-    {
-      id: user.id,
-      nome: user.nome,
-      usuario: user.usuario,
-      perfil: user.perfil,
-    } as ReturnUserDto,
-    PASSWORD_REFRESH_JWT,
-    {
-      subject: String(user.id),
-      expiresIn: "30D", // Tempo maior para o refresh token
+      expiresIn: "1h",
     }
   );
 };
