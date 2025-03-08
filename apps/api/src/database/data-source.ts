@@ -1,10 +1,11 @@
 import { DataSource } from "typeorm";
+import { UserToken } from "../modules/auth/entities/user-token";
 import { User } from "../modules/usuario/entities/user";
 
 export const dataSource = new DataSource({
   type: "sqlite",
   database: "src/database/database.sqlite", // Nome do arquivo do banco de dados SQLite
-  entities: [User], // Lista de entidades
+  entities: [User, UserToken], // Lista de entidades
   migrations: ["src/migration/**/*.ts"], // Caminho para as migrations
   synchronize: false, // Desative sync para usar migrations
   logging: true, // Ative logs para depuração

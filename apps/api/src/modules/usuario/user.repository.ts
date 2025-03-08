@@ -30,7 +30,7 @@ export class UsuarioRepository {
     return user;
   }
 
-  async findUserByUsuarioAndassword(
+  async findUserByUsuarioAndPassword(
     usuario: string,
     senha: string
   ): Promise<User> {
