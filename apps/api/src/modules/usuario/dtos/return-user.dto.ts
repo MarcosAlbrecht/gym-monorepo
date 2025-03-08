@@ -1,6 +1,6 @@
 import { User } from "../entities/user";
 
-export class ReturnCreateUserDto {
+export class ReturnUserDto {
   id: string;
   nome: string;
   usuario: string;
