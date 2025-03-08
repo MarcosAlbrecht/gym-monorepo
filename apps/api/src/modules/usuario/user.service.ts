@@ -43,4 +43,20 @@ export class UserService {
 
     return new ReturnUserDto(user);
   }
+
+  async findUserByUsuarioAndassword(
+    usuario: string,
+    senha: string
+  ): Promise<ReturnUserDto> {
+    const user = await this.userRepository.findUserByUsuarioAndPassword(
+      usuario,
+      senha
+    );
+
+    if (!user) {
+      throw new NotFoundException("Usuário não localizado");
+    }
+
+    return new ReturnUserDto(user);
+  }
 }

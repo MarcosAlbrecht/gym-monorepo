@@ -2,19 +2,19 @@ import { Request } from "express";
 import { sign, verify } from "jsonwebtoken";
 
 import { UnauthorizedException } from "../exceptions/unauthorized-exception";
-import { UserAuth } from "../modules/auth/dtos/auth-user.sto";
-import { User } from "../modules/usuario/entities/user";
+import { UserAuth } from "../modules/auth/dtos/auth-user.dto";
+import { ReturnUserDto } from "../modules/usuario/dtos/return-user.dto";
 
 export const PASSWORD_JWT = "umasenhamuitogrande";
 
-export const generateToken = (user: User): string => {
+export const generateToken = (user: ReturnUserDto): string => {
   return sign(
     {
       id: user.id,
       nome: user.nome,
       usuario: user.usuario,
       perfil: user.perfil,
-    } as UserAuth,
+    } as ReturnUserDto,
     PASSWORD_JWT,
     {
       subject: String(user.id),

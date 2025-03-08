@@ -29,4 +29,12 @@ export class UsuarioRepository {
     const user = this.repository.findOne({ where: { nome, usuario } });
     return user;
   }
+
+  async findUserByUsuarioAndassword(
+    usuario: string,
+    senha: string
+  ): Promise<User> {
+    const user = this.repository.findOne({ where: { usuario, senha } });
+    return user;
+  }
 }
