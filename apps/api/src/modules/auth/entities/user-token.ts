@@ -25,12 +25,12 @@ export class UserToken {
   @JoinColumn({ name: "id_usuario" })
   usuario: User;
 
-  @CreateDateColumn({
+  @Column({
     name: "expiracao_token",
     type: "datetime",
     nullable: false,
   })
-  expiracaoToken: string;
+  expiracaoToken: Date;
 
   @CreateDateColumn({
     name: "dt_inclusao",

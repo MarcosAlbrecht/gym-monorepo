@@ -1,6 +1,7 @@
 import { NotFoundException } from "../../exceptions/not-found-exceptions";
 import { CreatePasswordHashed } from "../../utils/password";
 import { CreateUserDto } from "./dtos/create-user.dto";
+import { ReturnCreateUserDto } from "./dtos/return-create-user.dto";
 import { ReturnUserDto } from "./dtos/return-user.dto";
 import { User } from "./entities/user";
 import { UsuarioRepository } from "./user.repository";
@@ -12,7 +13,7 @@ export class UserService {
     this.userRepository = new UsuarioRepository();
   }
 
-  async createUser(user: CreateUserDto): Promise<User> {
+  async createUser(user: CreateUserDto): Promise<ReturnCreateUserDto> {
     const hashedPwd = await CreatePasswordHashed(user.senha);
     user.senha = hashedPwd;
 
@@ -25,7 +26,7 @@ export class UserService {
     }
     const createdUser = await this.userRepository.createUser(user);
 
-    return createdUser;
+    return new ReturnCreateUserDto(createdUser);
   }
 
   async findAll(): Promise<ReturnUserDto[]> {
@@ -44,7 +45,7 @@ export class UserService {
     return new ReturnUserDto(user);
   }
 
-  async findUserByUsuarioAndassword(
+  async findUserByUsuarioAndPassword(
     usuario: string,
     senha: string
   ): Promise<ReturnUserDto> {
@@ -58,5 +59,15 @@ export class UserService {
     }
 
     return new ReturnUserDto(user);
+  }
+
+  async findUserByUsuario(usuario: string): Promise<User> {
+    const user = await this.userRepository.findUserByUsuario(usuario);
+
+    if (!user) {
+      throw new NotFoundException("Usuário não localizado");
+    }
+
+    return user;
   }
 }

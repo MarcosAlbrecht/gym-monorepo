@@ -1,7 +1,7 @@
-import { UserToken } from "../entities/user-token";
+import { User } from "../../usuario/entities/user";
 
 export interface CreateUserTokenDto {
   refreshToken: string;
-  id_usuario: UserToken;
-  expiracao_token: Date;
+  usuario: User;
+  expiracaoToken: Date;
 }
