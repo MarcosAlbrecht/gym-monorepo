@@ -15,4 +15,24 @@ export class UserTokenRepository {
     const user = this.repository.create(userTokenCreate);
     return await this.repository.save(user);
   }
+
+  async findUserTokenByRefreshToken(refreshToken: string): Promise<UserToken> {
+    const userToken = await this.repository.findOne({
+      where: { refreshToken },
+      relations: {
+        usuario: true,
+      },
+    });
+    return userToken;
+  }
+
+  async updateUserToken(userToken: UserToken): Promise<UserToken> {
+    await this.repository.update(userToken.id, {
+      refreshToken: userToken.refreshToken,
+      expiracaoToken: userToken.expiracaoToken,
+    });
+
+    // Após a atualização, você pode retornar o próprio objeto de token atualizado
+    return this.repository.findOneBy({ id: userToken.id });
+  }
 }

@@ -59,48 +59,6 @@ export const verifyToken = async (
   }
 };
 
-// Função para verificar o Refresh Token e gerar um novo Access Token
-// export const verifyAndRefreshToken = async (
-//   authorization: string | undefined,
-//   refreshToken: string | undefined
-// ): Promise<UserAuth> => {
-//   if (!authorization || !refreshToken) {
-//     throw new UnauthorizedException();
-//   }
-
-//   // Primeiro, tentamos verificar o Access Token
-//   try {
-//     const decodedToken = await verifyToken(authorization);
-//     return decodedToken; // Se o token for válido, retorna o usuário
-//   } catch (error) {
-//     // Se o access token expirou ou é inválido, tentamos verificar o refresh token
-//     const storedToken = await RefreshTokenRepository.findOne({
-//       where: { refresh_token: refreshToken },
-//     });
-
-//     if (!storedToken || new Date(storedToken.expiracao_token) < new Date()) {
-//       throw new UnauthorizedException();
-//     }
-
-//     try {
-//       // Se o refresh token for válido, geramos um novo access token
-//       const decoded = verify(refreshToken, PASSWORD_REFRESH_JWT) as UserAuth;
-
-//       // Gerar novo access token
-//       const newAccessToken = generateToken({
-//         id: decoded.id,
-//         nome: decoded.nome,
-//         usuario: decoded.usuario,
-//         perfil: decoded.perfil,
-//       });
-
-//       return newAccessToken; // Retorna o novo access token junto com os dados do usuário
-//     } catch (error) {
-//       throw new UnauthorizedException();
-//     }
-//   }
-// };
-
 export const getUserByToken = async (req: Request): Promise<UserAuthDto> => {
   const authorization = req.headers.authorization;
 

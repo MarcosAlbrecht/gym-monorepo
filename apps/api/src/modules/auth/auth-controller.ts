@@ -17,6 +17,21 @@ const auth = async (
   res.send(user);
 };
 
+const refreshToken = async (
+  req: Request<undefined, undefined, UserAuthDto>,
+  res: Response
+): Promise<void> => {
+  const authService = new AuthService();
+  const token = await authService
+    .refreshAuth(req.headers.authorization)
+    .catch((error) => {
+      new ReturnError(res, error);
+    });
+
+  res.send(token);
+};
+
 authRouter.post("/", auth);
+authRouter.post("/refresh-token", refreshToken);
 
 export default authRouter;

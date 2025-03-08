@@ -1,4 +1,5 @@
 import { NotFoundException } from "../../exceptions/not-found-exceptions";
+import { UnauthorizedException } from "../../exceptions/unauthorized-exception";
 import { generateToken } from "../../utils/auth";
 import { ValidatePassword } from "../../utils/password";
 import { generateRefreshToken } from "../../utils/refresh-token";
@@ -8,6 +9,7 @@ import { UserAuthDto } from "./dtos/auth-user.dto";
 
 import { CreateUserTokenDto } from "./dtos/create-user-token.dto";
 import { ReturnAuthDto } from "./dtos/return-auth.dto";
+import { UserToken } from "./entities/user-token";
 
 export class AuthService {
   private authRepository: UserTokenRepository;
@@ -35,5 +37,44 @@ export class AuthService {
       await this.authRepository.createUserToken(userToken);
 
     return new ReturnAuthDto(generateToken(existingUser), userTokenRefresh);
+  }
+
+  async refreshAuth(refreshToken: string): Promise<ReturnAuthDto> {
+    // Buscar o refreshToken no banco
+    const [, token] = refreshToken.split(" ");
+    const existingUserToken =
+      await this.authRepository.findUserTokenByRefreshToken(token);
+
+    if (!existingUserToken) {
+      throw new UnauthorizedException();
+    }
+
+    if (this.verifyRefreshTokenIsValid(existingUserToken.expiracaoToken)) {
+      // Ainda é válido, gerar apenas um novo accessToken
+      const accessToken = generateToken(existingUserToken.usuario);
+      return new ReturnAuthDto(accessToken, existingUserToken);
+    } else {
+      // Expirou, gerar um novo refreshToken e accessToken
+      const novoRefreshToken = generateRefreshToken();
+      const novaExpiracao = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 dias
+
+      existingUserToken.refreshToken = novoRefreshToken;
+      existingUserToken.expiracaoToken = novaExpiracao;
+
+      await this.authRepository.updateUserToken(existingUserToken); // Atualiza no banco
+
+      const novoAccessToken = generateToken(existingUserToken.usuario);
+      return new ReturnAuthDto(novoAccessToken, existingUserToken);
+    }
+  }
+
+  async findUserTokenByRefreshToken(refreshToken: string): Promise<UserToken> {
+    return await this.authRepository.findUserTokenByRefreshToken(refreshToken);
+  }
+
+  private verifyRefreshTokenIsValid(expiraToken: Date): boolean {
+    const now = new Date();
+    const expiracaoToken = new Date(expiraToken);
+    return expiracaoToken > now;
   }
 }
