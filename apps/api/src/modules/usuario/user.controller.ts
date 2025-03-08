@@ -1,5 +1,7 @@
 import { Request, Response, Router } from "express";
 // Ajuste o caminho conforme necessário
+import { validate } from "../../middlewares/valitade.middleware";
+import { createUserSchema } from "../schemas/create-user-schema";
 import { CreateUserDto } from "./dtos/create-user.dto";
 import { UserService } from "./user.service";
 // Ajuste o caminho conforme necessário
@@ -34,8 +36,7 @@ const findAllUsers = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-// Rota para buscar todos os usuários
 userRouter.get("/", findAllUsers);
-userRouter.post("/", createUser);
+userRouter.post("/", validate(createUserSchema), createUser);
 
 export default userRouter;
