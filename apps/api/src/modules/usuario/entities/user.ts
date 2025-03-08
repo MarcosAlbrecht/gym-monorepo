@@ -23,6 +23,10 @@ export class User {
   @Column({ type: "varchar", length: 10, nullable: false, enum: SituacaoEnum })
   situacao: string;
 
-  @CreateDateColumn({ name: "dt_inclusao" })
+  @CreateDateColumn({
+    name: "dt_inclusao",
+    type: "datetime",
+    default: () => "CURRENT_TIMESTAMP",
+  })
   dtInclusao: Date;
 }

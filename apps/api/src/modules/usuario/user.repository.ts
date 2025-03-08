@@ -24,4 +24,9 @@ export class UsuarioRepository {
     const user = this.repository.findOne({ where: { id } });
     return user;
   }
+
+  async findUserByNomeAndUsuario(nome: string, usuario: string): Promise<User> {
+    const user = this.repository.findOne({ where: { nome, usuario } });
+    return user;
+  }
 }

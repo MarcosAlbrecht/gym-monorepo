@@ -1,5 +1,7 @@
 import { Request, Response, Router } from "express";
 // Ajuste o caminho conforme necessário
+import { NotFoundException } from "../../exceptions/not-found-exceptions";
+import { ReturnError } from "../../exceptions/return-error";
 import { validate } from "../../middlewares/valitade.middleware";
 import { createUserSchema } from "../schemas/create-user-schema";
 import { CreateUserDto } from "./dtos/create-user.dto";
@@ -22,21 +24,34 @@ const createUser = async (
 
 // Função do controller para buscar todos os usuários
 const findAllUsers = async (req: Request, res: Response): Promise<void> => {
-  try {
-    res.status(200);
-    const userService = new UserService(); // Instanciando o serviço UserService
-    const users = await userService.findAll(); // Chamada ao serviço para buscar os usuários
-    res.status(200).json(users); // Retorna os usuários em caso de sucesso
-  } catch (error) {
-    // if (error instanceof NotFoundException) {
-    //   res.status(204).send(); // Envia status 204 se nenhum usuário for encontrado
-    // } else {
-    //   new ReturnError(res, error); // Tratamento de erro genérico
-    // }
-  }
+  res.status(200);
+  const userService = new UserService(); // Instanciando o serviço UserService
+  const users = await userService.findAll().catch((error) => {
+    if (error instanceof NotFoundException) {
+      res.status(204).send();
+    } else {
+      new ReturnError(res, error as Error); // Tratamento de erro genérico
+    }
+  });
+  res.status(200).json(users);
+};
+
+const findUsersById = async (req: Request, res: Response): Promise<void> => {
+  res.status(200);
+  const userService = new UserService(); // Instanciando o serviço UserService
+  const { id } = req.params;
+  const users = await userService.findUserById(id).catch((error) => {
+    if (error instanceof NotFoundException) {
+      res.status(204).send();
+    } else {
+      new ReturnError(res, error as Error); // Tratamento de erro genérico
+    }
+  });
+  res.status(200).json(users);
 };
 
 userRouter.get("/", findAllUsers);
+userRouter.get("/:id", findUsersById);
 userRouter.post("/", validate(createUserSchema), createUser);
 
 export default userRouter;

@@ -1,8 +1,9 @@
 import { Request } from "express";
 import { sign, verify } from "jsonwebtoken";
-import { User } from "../entities/user";
+
 import { UnauthorizedException } from "../exceptions/unauthorized-exception";
 import { UserAuth } from "../modules/auth/dtos/auth-user.sto";
+import { User } from "../modules/usuario/entities/user";
 
 export const PASSWORD_JWT = "umasenhamuitogrande";
 
