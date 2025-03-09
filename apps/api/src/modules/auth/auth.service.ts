@@ -5,7 +5,7 @@ import { ValidatePassword } from "../../utils/password";
 import { generateRefreshToken } from "../../utils/refresh-token";
 import { UserService } from "../usuario/user.service";
 import { UserTokenRepository } from "./auth.repository";
-import { UserAuthDto } from "./dtos/auth-user.dto";
+import { AuthDto } from "./dtos/auth.dto";
 
 import { CreateUserTokenDto } from "./dtos/create-user-token.dto";
 import { ReturnAuthDto } from "./dtos/return-auth.dto";
@@ -20,7 +20,7 @@ export class AuthService {
     this.authRepository = new UserTokenRepository();
   }
   //funçao para validaçao do login do usuario
-  async validateAuth(user: UserAuthDto): Promise<ReturnAuthDto> {
+  async validateAuth(user: AuthDto): Promise<ReturnAuthDto> {
     const existingUser = await this.userService.findUserByUsuario(user.usuario);
 
     const isValid = await ValidatePassword(user.senha, existingUser.senha);

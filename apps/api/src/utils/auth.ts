@@ -2,7 +2,8 @@ import { Request } from "express";
 import { sign, verify } from "jsonwebtoken";
 
 import { UnauthorizedException } from "../exceptions/unauthorized-exception";
-import { UserAuthDto } from "../modules/auth/dtos/auth-user.dto";
+
+import { UserAuthDto } from "../modules/auth/dtos/user-auth.dto";
 import { ReturnUserDto } from "../modules/usuario/dtos/return-user.dto";
 import { User } from "../modules/usuario/entities/user";
 

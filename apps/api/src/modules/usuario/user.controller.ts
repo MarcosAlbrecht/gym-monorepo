@@ -5,6 +5,7 @@ import { authMiddleware } from "../../middlewares/auth.middleware";
 import { validate } from "../../middlewares/valitade.middleware";
 import { createUserSchema } from "../schemas/create-user-schema";
 import { CreateUserDto } from "./dtos/create-user.dto";
+import { ReturnUserDto } from "./dtos/return-user.dto";
 import { UpdateUserDto } from "./dtos/update-user.dto";
 import { UserService } from "./user.service";
 // Ajuste o caminho conforme necessário
@@ -36,10 +37,14 @@ const findAllUsers = async (req: Request, res: Response): Promise<void> => {
 const findUsersById = async (req: Request, res: Response): Promise<void> => {
   const userService = new UserService(); // Instanciando o serviço UserService
   const { id } = req.params;
-  const users = await userService.findUserById(id).catch((error) => {
+  try {
+    const user = await userService.findUserById(id);
+    if (user) {
+      res.status(200).json(new ReturnUserDto(user));
+    }
+  } catch (error: any) {
     new ReturnError(res, error);
-  });
-  res.status(200).json(users);
+  }
 };
 
 const findUsersByIdUsuarioProfessor = async (

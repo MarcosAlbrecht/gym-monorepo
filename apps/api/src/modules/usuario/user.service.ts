@@ -1,6 +1,7 @@
 import { Request } from "express";
 import { PerfilEnum } from "../../enums/perfil";
 import { NotFoundException } from "../../exceptions/not-found-exceptions";
+import { getUserByToken } from "../../utils/auth";
 import { CreatePasswordHashed } from "../../utils/password";
 import { CreateUserDto } from "./dtos/create-user.dto";
 import { InsertUserDto } from "./dtos/inser-user.dto";
@@ -49,22 +50,24 @@ export class UserService {
 
   async findAll(req: Request): Promise<ReturnUserDto[]> {
     const { skip, limit } = req.query;
+    const userAuth = await getUserByToken(req);
     const users = await this.userRepository.findAll(
       Number(skip),
-      Number(limit)
+      Number(limit),
+      userAuth
     );
 
     return users.map((user) => new ReturnUserDto(user));
   }
 
-  async findUserById(id: string): Promise<ReturnUserDto> {
+  async findUserById(id: string): Promise<User> {
     const user = await this.userRepository.findUserById(id);
 
     if (!user) {
       throw new NotFoundException("Usuário não localizado");
     }
 
-    return new ReturnUserDto(user);
+    return user;
   }
 
   async findUserByUsuarioAndPassword(

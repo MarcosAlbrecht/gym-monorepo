@@ -5,13 +5,13 @@ import { validate } from "../../middlewares/valitade.middleware";
 import { getUserByToken } from "../../utils/auth";
 import { authUserSchema } from "../schemas/auth-schema";
 import { AuthService } from "./auth.service";
-import { UserAuthDto } from "./dtos/auth-user.dto";
+import { AuthDto } from "./dtos/auth.dto";
 
 const authRouter = Router();
 const route = Router();
 
 const auth = async (
-  req: Request<undefined, undefined, UserAuthDto>,
+  req: Request<undefined, undefined, AuthDto>,
   res: Response
 ): Promise<void> => {
   const authService = new AuthService();
@@ -23,7 +23,7 @@ const auth = async (
 };
 
 const refreshToken = async (
-  req: Request<undefined, undefined, UserAuthDto>,
+  req: Request<undefined, undefined, AuthDto>,
   res: Response
 ): Promise<void> => {
   const authService = new AuthService();
@@ -37,7 +37,7 @@ const refreshToken = async (
 };
 
 const deleteUserToken = async (
-  req: Request<undefined, undefined, UserAuthDto>,
+  req: Request<undefined, undefined, AuthDto>,
   res: Response
 ): Promise<void> => {
   const user = await getUserByToken(req);

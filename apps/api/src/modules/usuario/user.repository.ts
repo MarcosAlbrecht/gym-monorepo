@@ -1,6 +1,8 @@
 import { Repository } from "typeorm";
 import { dataSource } from "../../database/data-source";
 
+import { PerfilEnum } from "../../enums/perfil";
+import { UserAuthDto } from "../auth/dtos/user-auth.dto";
 import { CreateUserDto } from "./dtos/create-user.dto";
 import { InsertUpdateUserDto } from "./dtos/insert-update-user.dto";
 import { User } from "./entities/user";
@@ -16,10 +18,21 @@ export class UsuarioRepository {
     return await this.repository.save(user);
   }
 
-  async findAll(skip: number = 0, limit: number = 9999999999): Promise<User[]> {
+  async findAll(
+    skip: number = 0,
+    limit: number = 9999999999,
+    userAuth: UserAuthDto
+  ): Promise<User[]> {
+    const whereCondition: any = {};
+
+    // Se perfil foi passado, adiciona a condição no where
+    if (userAuth.perfil === PerfilEnum.PROFESSOR) {
+      whereCondition.usuario_professor = { id: userAuth.id };
+    }
     const user = this.repository.find({
       skip,
       take: limit,
+      where: whereCondition,
       relations: {
         usuario_professor: true,
       },

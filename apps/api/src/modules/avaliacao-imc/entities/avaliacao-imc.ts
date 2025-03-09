@@ -7,6 +7,7 @@ import {
   ManyToOne,
   PrimaryColumn,
 } from "typeorm";
+import { ImcClassificacaoEnum } from "../../../enums/classificacao-imc";
 import { User } from "../../usuario/entities/user";
 
 @Entity("avaliacao_imc")
@@ -15,13 +16,21 @@ export class AvaliacaoImc {
   id: string;
 
   @Column({ type: "decimal", precision: 5, scale: 2 })
-  altura: string;
+  altura: number;
 
   @Column({ type: "decimal", precision: 5, scale: 2 })
-  peso: string;
+  peso: number;
 
   @Column({ type: "decimal", precision: 5, scale: 2 })
-  imc: string;
+  imc: number;
+
+  @Column({
+    type: "varchar",
+    length: 20,
+    nullable: false,
+    enum: ImcClassificacaoEnum,
+  })
+  classificacao: ImcClassificacaoEnum;
 
   @ManyToOne(() => User)
   @JoinColumn({ name: "id_usuario_avaliacao" })

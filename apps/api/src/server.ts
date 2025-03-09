@@ -3,6 +3,7 @@ import cors from "cors";
 import express, { type Express } from "express";
 import morgan from "morgan";
 import authRouter from "./modules/auth/auth-controller";
+import avaliacaoRoute from "./modules/avaliacao-imc/avaliacao-imc.controller";
 import userRouter from "./modules/usuario/user.controller";
 
 export const createServer = (): Express => {
@@ -16,6 +17,7 @@ export const createServer = (): Express => {
 
   app.use("/users", userRouter);
   app.use("/auth", authRouter);
+  app.use("/avaliacao", avaliacaoRoute);
 
   return app;
 };
