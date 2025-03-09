@@ -1,0 +1,40 @@
+import "reflect-metadata";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryColumn,
+} from "typeorm";
+import { User } from "../../usuario/entities/user";
+
+@Entity("avaliacao_imc")
+export class AvaliacaoImc {
+  @PrimaryColumn({ type: "uuid", generated: "uuid" })
+  id: string;
+
+  @Column({ type: "decimal", precision: 5, scale: 2 })
+  altura: string;
+
+  @Column({ type: "decimal", precision: 5, scale: 2 })
+  peso: string;
+
+  @Column({ type: "decimal", precision: 5, scale: 2 })
+  imc: string;
+
+  @ManyToOne(() => User)
+  @JoinColumn({ name: "id_usuario_avaliacao" })
+  usuario_avaliacao: User;
+
+  @ManyToOne(() => User)
+  @JoinColumn({ name: "id_usuario_aluno" })
+  usuario_aluno: User;
+
+  @CreateDateColumn({
+    name: "dt_inclusao",
+    type: "datetime",
+    default: () => "CURRENT_TIMESTAMP",
+  })
+  dtInclusao: Date;
+}
