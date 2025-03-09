@@ -19,7 +19,7 @@ export class AuthService {
     this.userService = new UserService();
     this.authRepository = new UserTokenRepository();
   }
-
+  //funçao para validaçao do login do usuario
   async validateAuth(user: UserAuthDto): Promise<ReturnAuthDto> {
     const existingUser = await this.userService.findUserByUsuario(user.usuario);
 
@@ -44,7 +44,7 @@ export class AuthService {
 
     return new ReturnAuthDto(generateToken(existingUser), userTokenRefresh);
   }
-
+  //funçao para revalidaçao do token JWT
   async refreshAuth(refreshToken: string): Promise<ReturnAuthDto> {
     // Buscar o refreshToken no banco
     const [, token] = refreshToken.split(" ");

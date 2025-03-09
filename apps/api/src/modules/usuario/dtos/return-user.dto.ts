@@ -7,6 +7,7 @@ export class ReturnUserDto {
   perfil: string;
   situacao: string;
   dt_inclusao: Date;
+  usuario_professor?: ReturnUserDto | null;
 
   constructor(user: User) {
     this.id = user.id;
@@ -15,5 +16,8 @@ export class ReturnUserDto {
     this.perfil = user.perfil;
     this.situacao = user.situacao;
     this.dt_inclusao = user.dtInclusao;
+    this.usuario_professor = user.usuario_professor
+      ? new ReturnUserDto(user.usuario_professor) // Usar o professor real
+      : null;
   }
 }

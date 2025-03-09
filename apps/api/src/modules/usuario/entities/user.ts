@@ -1,5 +1,12 @@
 import "reflect-metadata";
-import { Column, CreateDateColumn, Entity, PrimaryColumn } from "typeorm";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryColumn,
+} from "typeorm";
 import { PerfilEnum } from "../../../enums/perfil";
 import { SituacaoEnum } from "../../../enums/situacao";
 
@@ -22,6 +29,10 @@ export class User {
 
   @Column({ type: "varchar", length: 10, nullable: false, enum: SituacaoEnum })
   situacao: string;
+
+  @ManyToOne(() => User)
+  @JoinColumn({ name: "id_usuario_professor" })
+  usuario_professor: User;
 
   @CreateDateColumn({
     name: "dt_inclusao",

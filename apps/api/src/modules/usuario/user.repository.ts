@@ -2,6 +2,7 @@ import { Repository } from "typeorm";
 import { dataSource } from "../../database/data-source";
 
 import { CreateUserDto } from "./dtos/create-user.dto";
+import { InsertUpdateUserDto } from "./dtos/insert-update-user.dto";
 import { User } from "./entities/user";
 
 export class UsuarioRepository {
@@ -15,13 +16,29 @@ export class UsuarioRepository {
     return await this.repository.save(user);
   }
 
-  async findAll(): Promise<User[]> {
-    const user = this.repository.find();
+  async findAll(skip: number = 0, limit: number = 9999999999): Promise<User[]> {
+    const user = this.repository.find({
+      skip,
+      take: limit,
+      relations: {
+        usuario_professor: true,
+      },
+    });
     return user;
   }
 
   async findUserById(id: string): Promise<User> {
-    const user = this.repository.findOne({ where: { id } });
+    const user = this.repository.findOne({
+      where: { id },
+      relations: { usuario_professor: true },
+    });
+    return user;
+  }
+
+  async findUserByIdProfessor(id: string): Promise<User> {
+    const user = this.repository.findOne({
+      where: { usuario_professor: { id } },
+    });
     return user;
   }
 
@@ -41,5 +58,36 @@ export class UsuarioRepository {
   ): Promise<User> {
     const user = this.repository.findOne({ where: { usuario, senha } });
     return user;
+  }
+
+  async findUsersByIdUsuarioProfessor(
+    skip: number = 0,
+    limit: number = 9999999999,
+    usuarioProfessor: User
+  ): Promise<User[]> {
+    const user = this.repository.find({
+      skip,
+      take: limit,
+      where: { usuario_professor: usuarioProfessor },
+      relations: { usuario_professor: true },
+    });
+    return user;
+  }
+
+  async updateUserById(id: string, user: InsertUpdateUserDto): Promise<User> {
+    await this.repository.update(id, user);
+
+    // Após a atualização, você pode retornar o próprio objeto de token atualizado
+    const usrToken = await this.repository.findOne({
+      where: { id },
+      relations: {
+        usuario_professor: true,
+      },
+    });
+    return usrToken;
+  }
+
+  async deleteUserById(id: string): Promise<any> {
+    return await this.repository.delete({ id });
   }
 }

@@ -1,6 +1,9 @@
 import { Request, Response, Router } from "express";
 import { ReturnError } from "../../exceptions/return-error";
+import { authMiddleware } from "../../middlewares/auth.middleware";
+import { validate } from "../../middlewares/valitade.middleware";
 import { getUserByToken } from "../../utils/auth";
+import { authUserSchema } from "../schemas/auth-schema";
 import { AuthService } from "./auth.service";
 import { UserAuthDto } from "./dtos/auth-user.dto";
 
@@ -48,9 +51,9 @@ const deleteUserToken = async (
   res.send(token);
 };
 
-authRouter.post("/", auth);
+authRouter.post("/", validate(authUserSchema), auth);
 authRouter.post("/refresh-token", refreshToken);
-//route.use(authMiddleware);
+authRouter.use(authMiddleware);
 authRouter.delete("/", deleteUserToken);
 
 export default authRouter;
