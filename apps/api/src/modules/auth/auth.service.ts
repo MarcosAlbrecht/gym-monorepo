@@ -1,3 +1,4 @@
+import { SituacaoEnum } from "../../enums/situacao";
 import { NotFoundException } from "../../exceptions/not-found-exceptions";
 import { UnauthorizedException } from "../../exceptions/unauthorized-exception";
 import { generateToken } from "../../utils/auth";
@@ -23,9 +24,13 @@ export class AuthService {
   async validateAuth(user: AuthDto): Promise<ReturnAuthDto> {
     const existingUser = await this.userService.findUserByUsuario(user.usuario);
 
+    if (existingUser.situacao === SituacaoEnum.INATIVO) {
+      throw new NotFoundException("Usuário não localizado");
+    }
+
     const isValid = await ValidatePassword(user.senha, existingUser.senha);
     if (!isValid) {
-      throw new NotFoundException("Usuario nao localiado.");
+      throw new NotFoundException("Usuário inativo.");
     }
 
     const userToken: CreateUserTokenDto = {
