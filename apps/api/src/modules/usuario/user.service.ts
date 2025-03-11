@@ -70,6 +70,17 @@ export class UserService {
     return user;
   }
 
+  async findLoggedUser(req: Request): Promise<User> {
+    const { id } = await getUserByToken(req);
+    const user = await this.userRepository.findUserById(id);
+
+    if (!user) {
+      throw new NotFoundException("Usuário não localizado");
+    }
+
+    return user;
+  }
+
   async findUserByUsuarioAndPassword(
     usuario: string,
     senha: string

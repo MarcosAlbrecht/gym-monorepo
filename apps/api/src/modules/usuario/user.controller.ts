@@ -47,6 +47,18 @@ const findUsersById = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
+const findLoggedUser = async (req: Request, res: Response): Promise<void> => {
+  const userService = new UserService(); // Instanciando o serviço UserService
+  try {
+    const user = await userService.findLoggedUser(req);
+    if (user) {
+      res.status(200).json(new ReturnUserDto(user));
+    }
+  } catch (error: any) {
+    new ReturnError(res, error);
+  }
+};
+
 const findUsersByIdUsuarioProfessor = async (
   req: Request,
   res: Response
@@ -85,6 +97,7 @@ userRouter.post("/", validate(createUserSchema), createUser);
 userRouter.use(authMiddleware);
 userRouter.get("/", findAllUsers);
 userRouter.get("/:id", findUsersById);
+userRouter.get("/logged-user", findLoggedUser);
 userRouter.get("/alunos-professor/:idProfessor", findUsersByIdUsuarioProfessor);
 userRouter.put("/:id", updateUserById);
 userRouter.delete("/:id", deleteUserById);
