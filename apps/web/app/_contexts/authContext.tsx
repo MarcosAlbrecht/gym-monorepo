@@ -22,7 +22,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const token = localStorage.getItem("token");
     const fetchUser = async () => {
       try {
-        const { data } = await api.get<UserDto>("/logged-user"); // 🔥 Obtém dados do usuário
+        const { data } = await api.get<UserDto>("/users/logged"); // 🔥 Obtém dados do usuário
         setUser(data);
       } catch (error) {
         console.error("Erro ao buscar usuário", error);
