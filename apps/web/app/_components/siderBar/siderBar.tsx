@@ -9,16 +9,19 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { ReactNode, useEffect } from "react";
-import MobileNav from "./mobileNax";
+
+import { useAuth } from "@/app/_hooks/useAuth";
+import MobileNav from "./mobileNav";
 import SidebarContent from "./sidebarContent";
 
 interface SidebarProps {
   children?: ReactNode;
 }
 
-const Sidebar = ({ children }: SidebarProps) => {
+export default function Sidebar({ children }: SidebarProps) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const isDesktop = useBreakpointValue({ base: false, md: true });
+  const { user } = useAuth();
 
   useEffect(() => {
     if (isDesktop) onClose();
@@ -28,6 +31,7 @@ const Sidebar = ({ children }: SidebarProps) => {
     <Box minH="100vh" bg={useColorModeValue("gray.100", "gray.900")}>
       {/* Sidebar Desktop */}
       <SidebarContent
+        user={user!}
         onClose={onClose}
         display={{ base: "none", md: "block" }}
       />
@@ -42,7 +46,7 @@ const Sidebar = ({ children }: SidebarProps) => {
         size="full"
       >
         <DrawerContent>
-          <SidebarContent onClose={onClose} />
+          <SidebarContent user={user!} onClose={onClose} />
         </DrawerContent>
       </Drawer>
 
@@ -55,6 +59,4 @@ const Sidebar = ({ children }: SidebarProps) => {
       </Box>
     </Box>
   );
-};
-
-export default Sidebar;
+}

@@ -1,9 +1,9 @@
 import Sidebar from "@/app/_components/siderBar/siderBar";
 
-export default function Avaliacoes() {
+export default function Users() {
   return (
     <Sidebar>
-      <h1>avaliacoes</h1>
+      <h1>users</h1>
     </Sidebar>
   );
 }

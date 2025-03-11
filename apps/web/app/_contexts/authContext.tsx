@@ -19,13 +19,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<UserDto | null>(null);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = storage.getToken(); // Pega o token de forma segura
+
+    if (!token) return; // Se não houver token, não busca o usuário
+
     const fetchUser = async () => {
       try {
-        const { data } = await api.get<UserDto>("/users/logged"); // 🔥 Obtém dados do usuário
+        const { data } = await api.get<UserDto>("/users/logged");
         setUser(data);
       } catch (error) {
         console.error("Erro ao buscar usuário", error);
+        logout(); // Remove token inválido automaticamente
       }
     };
 
@@ -33,26 +37,24 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   const login = async (usuario: string, senha: string) => {
-    console.log("iniciou o login");
+    try {
+      const { token, refresh_token, user } = await api
+        .post("/auth", { usuario, senha })
+        .then((res) => res.data);
 
-    const { token, refresh_token, user } = await api
-      .post("/auth", { usuario, senha })
-      .then((res) => res.data);
+      storage.setToken(token);
+      storage.setRefreshToken(refresh_token);
 
-    console.log(`retorno chamada: `, user);
-    // Salvar tokens e dados do usuário
-    storage.setToken(token);
-    storage.setRefreshToken(refresh_token);
-    //localStorage.setItem("refresh_token", refresh_token);
-    //localStorage.setItem("user", JSON.stringify(user));
-
-    setUser(user);
+      setUser(user);
+    } catch (error) {
+      console.error("Erro ao realizar login", error);
+      throw new Error("Usuário ou senha inválidos");
+    }
   };
 
   const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("refresh_token");
-    //localStorage.removeItem("user");
+    storage.removeToken();
+    storage.removeRefreshToken();
     setUser(null);
     window.location.href = "/login"; // Redireciona para login
   };

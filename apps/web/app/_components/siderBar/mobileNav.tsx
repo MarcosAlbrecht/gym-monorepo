@@ -18,7 +18,7 @@ interface MobileProps {
   onOpen: () => void;
 }
 
-const MobileNav = ({ onOpen }: MobileProps) => {
+export default function MobileNav({ onOpen }: MobileProps) {
   return (
     <Flex
       ml={{ base: 0, md: 60 }}
@@ -92,6 +92,4 @@ const MobileNav = ({ onOpen }: MobileProps) => {
       </HStack>
     </Flex>
   );
-};
-
-export default MobileNav;
+}

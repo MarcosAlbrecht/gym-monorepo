@@ -1,20 +1,3 @@
-// import axios from "axios";
-// import { AuthResponse } from "./dtos/authResponseDto";
-
-// export const loginUser = async (
-//   usuario: string,
-//   password: string
-// ): Promise<AuthResponse> => {
-//   const response = await axios.post<AuthResponse>(
-//     "http://localhost:3001/auth",
-//     {
-//       usuario,
-//       senha: password,
-//     }
-//   );
-//   return response.data;
-// };
-
 import axios from "axios";
 import { storage } from "../_utils/storage";
 
@@ -49,16 +32,18 @@ api.interceptors.response.use(
         );
 
         // Atualiza os tokens
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("refresh_token", data.refresh_token);
+        storage.setToken(data.token);
+        storage.setRefreshToken(data.refresh_token);
 
         // Atualiza os headers da requisição original e reenvia
         error.config.headers.Authorization = `Bearer ${data.token}`;
         return axios(error.config);
       } catch (refreshError) {
         console.error("Erro ao renovar token:", refreshError);
-        localStorage.removeItem("token");
-        localStorage.removeItem("refresh_token");
+
+        storage.removeToken();
+        storage.removeRefreshToken();
+
         window.location.href = "/login";
         return Promise.reject(refreshError);
       }

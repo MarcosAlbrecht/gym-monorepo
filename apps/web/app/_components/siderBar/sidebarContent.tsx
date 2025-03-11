@@ -1,3 +1,5 @@
+import { UserDto } from "@/app/_services/dtos/userDto";
+import { PerfilEnum } from "@/app/_services/enums/perfil";
 import {
   Box,
   BoxProps,
@@ -6,28 +8,38 @@ import {
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
-import {
-  FiCompass,
-  FiHome,
-  FiSettings,
-  FiStar,
-  FiTrendingUp,
-} from "react-icons/fi";
+import { redirect } from "next/navigation";
+import { useState } from "react";
+import { FiClipboard, FiUser } from "react-icons/fi";
 import NavItem from "./navItem";
 
 interface SidebarProps extends BoxProps {
+  user: UserDto;
   onClose: () => void;
 }
 
 const LinkItems = [
-  { name: "Home", icon: FiHome },
-  { name: "Trending", icon: FiTrendingUp },
-  { name: "Explore", icon: FiCompass },
-  { name: "Favourites", icon: FiStar },
-  { name: "Settings", icon: FiSettings },
+  {
+    name: "Avaliações",
+    icon: FiClipboard,
+    path: "avaliacoes",
+    roles: [PerfilEnum.ADMIN, PerfilEnum.ALUNO, PerfilEnum.PROFESSOR],
+  },
+  { name: "Usuários", icon: FiUser, path: "users", roles: [PerfilEnum.ADMIN] }, // Apenas admin vê esse item
 ];
 
-const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
+export default function SidebarContent({
+  user,
+  onClose,
+  ...rest
+}: SidebarProps) {
+  // Obtém o usuário autenticado
+  console.log("usuario logado: ", user);
+  const [selectedItem, setSelectedItem] = useState<string | null>(null);
+
+  // Define a role do usuário (padrão: "aluno" se não estiver logado)
+  const userRole = user?.perfil || PerfilEnum.ALUNO;
+
   return (
     <Box
       transition="3s ease"
@@ -45,13 +57,19 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
         </Text>
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
       </Flex>
-      {LinkItems.map((link) => (
-        <NavItem key={link.name} icon={link.icon}>
+
+      {LinkItems.filter((link) => link.roles.includes(userRole)).map((link) => (
+        <NavItem
+          key={link.name}
+          icon={link.icon}
+          isActive={selectedItem === link.name}
+          onClick={() => {
+            setSelectedItem(link.name), redirect(link.path);
+          }}
+        >
           {link.name}
         </NavItem>
       ))}
     </Box>
   );
-};
-
-export default SidebarContent;
+}
