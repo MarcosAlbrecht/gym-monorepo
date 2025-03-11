@@ -27,9 +27,11 @@ export class AvaliacaoImcRepository {
   ): Promise<AvaliacaoImc[]> {
     const whereCondition: any = {};
 
-    // Se perfil foi passado, adiciona a condição no where
+    //adiciona a condição no where com base no perfil
     if (userAuth.perfil === PerfilEnum.PROFESSOR) {
       whereCondition.usuario_avaliacao = { id: userAuth.id };
+    } else if (userAuth.perfil === PerfilEnum.ALUNO) {
+      whereCondition.usuario_aluno = { id: userAuth.id };
     }
     const user = this.repository.find({
       skip,

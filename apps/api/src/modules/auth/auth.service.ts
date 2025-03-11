@@ -47,7 +47,11 @@ export class AuthService {
       userTokenRefresh = await this.authRepository.createUserToken(userToken);
     }
 
-    return new ReturnAuthDto(generateToken(existingUser), userTokenRefresh);
+    return new ReturnAuthDto(
+      generateToken(existingUser),
+      userTokenRefresh,
+      existingUser
+    );
   }
   //funçao para revalidaçao do token JWT
   async refreshAuth(refreshToken: string): Promise<ReturnAuthDto> {
@@ -63,7 +67,7 @@ export class AuthService {
     if (this.verifyRefreshTokenIsValid(existingUserToken.expiracaoToken)) {
       // Ainda é válido, gerar apenas um novo accessToken
       const accessToken = generateToken(existingUserToken.usuario);
-      return new ReturnAuthDto(accessToken, existingUserToken);
+      return new ReturnAuthDto(accessToken, existingUserToken, null);
     } else {
       // Expirou, gerar um novo refreshToken e accessToken
       const novoRefreshToken = generateRefreshToken();
@@ -75,7 +79,7 @@ export class AuthService {
       await this.authRepository.updateUserToken(existingUserToken); // Atualiza no banco
 
       const novoAccessToken = generateToken(existingUserToken.usuario);
-      return new ReturnAuthDto(novoAccessToken, existingUserToken);
+      return new ReturnAuthDto(novoAccessToken, existingUserToken, null);
     }
   }
 

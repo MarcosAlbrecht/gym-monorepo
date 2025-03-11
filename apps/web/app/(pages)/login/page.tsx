@@ -1,4 +1,5 @@
 "use client";
+import { useAuth } from "@/app/_hooks/useAuth";
 import {
   Box,
   Button,
@@ -12,9 +13,9 @@ import {
 } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { loginUser } from "../../_services/api";
 
 // Esquema de validação com Zod
 const loginSchema = z.object({
@@ -24,7 +25,9 @@ const loginSchema = z.object({
 
 type LoginFormValues = z.infer<typeof loginSchema>;
 
-export default function Login() {
+export default function Home() {
+  const router = useRouter();
+  const { login } = useAuth();
   const {
     register,
     handleSubmit,
@@ -35,10 +38,11 @@ export default function Login() {
 
   const mutation = useMutation({
     mutationFn: ({ usuario, password }: LoginFormValues) =>
-      loginUser(usuario, password),
+      login(usuario, password),
     onSuccess: (data) => {
       //login(data);
-      console.log(data);
+      console.log("sucesso no login: ");
+      router.push("/avaliacoes");
     },
     onError: (error) => {
       console.error("Erro ao logar:", error);
