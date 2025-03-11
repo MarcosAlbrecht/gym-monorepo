@@ -15,7 +15,7 @@ const auth = async (
   res: Response
 ): Promise<void> => {
   const authService = new AuthService();
-  const user = await authService.validateAuth(req.body).catch((error) => {
+  const user = await authService.validateAuth(req.body, res).catch((error) => {
     new ReturnError(res, error);
   });
 
@@ -27,11 +27,9 @@ const refreshToken = async (
   res: Response
 ): Promise<void> => {
   const authService = new AuthService();
-  const token = await authService
-    .refreshAuth(req.headers.authorization)
-    .catch((error) => {
-      new ReturnError(res, error);
-    });
+  const token = await authService.refreshAuth(req).catch((error) => {
+    new ReturnError(res, error);
+  });
 
   res.send(token);
 };
@@ -43,7 +41,7 @@ const deleteUserToken = async (
   const user = await getUserByToken(req);
   const authService = new AuthService();
   const token = await authService
-    .refreshAuth(req.headers.authorization)
+    .deleteUserTokenByIdUser(req)
     .catch((error) => {
       new ReturnError(res, error);
     });
@@ -54,6 +52,6 @@ const deleteUserToken = async (
 authRouter.post("/", validate(authUserSchema), auth);
 authRouter.post("/refresh-token", refreshToken);
 authRouter.use(authMiddleware);
-authRouter.delete("/", deleteUserToken);
+authRouter.delete("/:id", deleteUserToken);
 
 export default authRouter;

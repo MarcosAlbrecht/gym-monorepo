@@ -1,3 +1,4 @@
+import { Request, Response } from "express";
 import { SituacaoEnum } from "../../enums/situacao";
 import { NotFoundException } from "../../exceptions/not-found-exceptions";
 import { UnauthorizedException } from "../../exceptions/unauthorized-exception";
@@ -21,7 +22,7 @@ export class AuthService {
     this.authRepository = new UserTokenRepository();
   }
   //funçao para validaçao do login do usuario
-  async validateAuth(user: AuthDto): Promise<ReturnAuthDto> {
+  async validateAuth(user: AuthDto, res: Response): Promise<ReturnAuthDto> {
     const existingUser = await this.userService.findUserByUsuario(user.usuario);
 
     if (existingUser.situacao === SituacaoEnum.INATIVO) {
@@ -38,7 +39,7 @@ export class AuthService {
       usuario: existingUser,
       expiracaoToken: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
     };
-    let userTokenRefresh = null;
+    let userTokenRefresh: UserToken = null;
     const refreshTokenExists =
       await this.authRepository.findUserTokenByUserId(existingUser);
     if (refreshTokenExists) {
@@ -47,14 +48,17 @@ export class AuthService {
       userTokenRefresh = await this.authRepository.createUserToken(userToken);
     }
 
-    return new ReturnAuthDto(
-      generateToken(existingUser),
-      userTokenRefresh,
-      existingUser
-    );
+    res.cookie("refresh_token", userTokenRefresh.refreshToken, {
+      httpOnly: true,
+      secure: false,
+      path: "/auth/refresh-token",
+    });
+
+    return new ReturnAuthDto(generateToken(existingUser), existingUser);
   }
   //funçao para revalidaçao do token JWT
-  async refreshAuth(refreshToken: string): Promise<ReturnAuthDto> {
+  async refreshAuth(req: Request): Promise<ReturnAuthDto> {
+    const refreshToken = req.cookies.refresh_token;
     // Buscar o refreshToken no banco
     const [, token] = refreshToken.split(" ");
     const existingUserToken =
@@ -67,7 +71,7 @@ export class AuthService {
     if (this.verifyRefreshTokenIsValid(existingUserToken.expiracaoToken)) {
       // Ainda é válido, gerar apenas um novo accessToken
       const accessToken = generateToken(existingUserToken.usuario);
-      return new ReturnAuthDto(accessToken, existingUserToken, null);
+      return new ReturnAuthDto(accessToken, null);
     } else {
       // Expirou, gerar um novo refreshToken e accessToken
       const novoRefreshToken = generateRefreshToken();
@@ -79,7 +83,7 @@ export class AuthService {
       await this.authRepository.updateUserToken(existingUserToken); // Atualiza no banco
 
       const novoAccessToken = generateToken(existingUserToken.usuario);
-      return new ReturnAuthDto(novoAccessToken, existingUserToken, null);
+      return new ReturnAuthDto(novoAccessToken, null);
     }
   }
 
@@ -87,8 +91,9 @@ export class AuthService {
     return await this.authRepository.findUserTokenByRefreshToken(refreshToken);
   }
 
-  async deleteUserTokenByIdUser(idUsuario: string): Promise<any> {
-    const user = await this.userService.findUserById(idUsuario);
+  async deleteUserTokenByIdUser(req: Request): Promise<any> {
+    const { id } = req.params;
+    const user = await this.userService.findUserById(id);
     if (!user) {
       return new NotFoundException("Usuário náo localizado");
     }
