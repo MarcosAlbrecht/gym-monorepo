@@ -19,11 +19,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<UserDto | null>(null);
 
   useEffect(() => {
-    // const token = localStorage.getItem("token");
-    // const userData = localStorage.getItem("user");
-    // if (token && userData) {
-    //   setUser(JSON.parse(userData));
-    // }
+    const token = localStorage.getItem("token");
+    const fetchUser = async () => {
+      try {
+        const { data } = await api.get("/logged-user"); // 🔥 Obtém dados do usuário
+        setUser(data);
+      } catch (error) {
+        console.error("Erro ao buscar usuário", error);
+      }
+    };
+
+    fetchUser();
   }, []);
 
   const login = async (usuario: string, senha: string) => {
