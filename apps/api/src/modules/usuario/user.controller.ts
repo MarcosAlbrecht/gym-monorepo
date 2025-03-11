@@ -96,9 +96,9 @@ const deleteUserById = async (req: Request, res: Response): Promise<void> => {
 userRouter.post("/", validate(createUserSchema), createUser);
 userRouter.use(authMiddleware);
 userRouter.get("/", findAllUsers);
-userRouter.get("/:id", findUsersById);
-userRouter.get("/logged-user", findLoggedUser);
+userRouter.get("/logged", findLoggedUser);
 userRouter.get("/alunos-professor/:idProfessor", findUsersByIdUsuarioProfessor);
+userRouter.get("/:id", findUsersById);
 userRouter.put("/:id", updateUserById);
 userRouter.delete("/:id", deleteUserById);
 
