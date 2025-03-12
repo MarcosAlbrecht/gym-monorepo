@@ -1,4 +1,4 @@
-import Sidebar from "@/app/_components/siderBar/siderBar";
+import Sidebar from "@/app/_components/siderBar";
 
 export default function Users() {
   return (

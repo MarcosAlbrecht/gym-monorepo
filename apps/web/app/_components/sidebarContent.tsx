@@ -1,5 +1,3 @@
-import { UserDto } from "@/app/_services/dtos/userDto";
-import { PerfilEnum } from "@/app/_services/enums/perfil";
 import {
   Box,
   BoxProps,
@@ -8,9 +6,10 @@ import {
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { redirect } from "next/navigation";
+import { redirect, usePathname } from "next/navigation";
 import { useState } from "react";
 import { FiClipboard, FiUser } from "react-icons/fi";
+import { PerfilEnum } from "../_services/enums/perfil";
 import NavItem from "./navItem";
 
 interface SidebarProps extends BoxProps {
@@ -22,10 +21,10 @@ const LinkItems = [
   {
     name: "Avaliações",
     icon: FiClipboard,
-    path: "avaliacoes",
+    path: "/avaliacoes",
     roles: [PerfilEnum.ADMIN, PerfilEnum.ALUNO, PerfilEnum.PROFESSOR],
   },
-  { name: "Usuários", icon: FiUser, path: "users", roles: [PerfilEnum.ADMIN] }, // Apenas admin vê esse item
+  { name: "Usuários", icon: FiUser, path: "/users", roles: [PerfilEnum.ADMIN] }, // Apenas admin vê esse item
 ];
 
 export default function SidebarContent({
@@ -34,9 +33,10 @@ export default function SidebarContent({
   ...rest
 }: SidebarProps) {
   // Obtém o usuário autenticado
-  console.log("usuario logado: ", user);
-  const [selectedItem, setSelectedItem] = useState<string | null>(null);
+  //console.log("usuario logado: ", user);
 
+  const [selectedItem, setSelectedItem] = useState<string | null>(null);
+  const pathname = usePathname();
   // Define a role do usuário (padrão: "aluno" se não estiver logado)
   const userRole = user?.perfil || PerfilEnum.ALUNO;
 
@@ -62,9 +62,9 @@ export default function SidebarContent({
         <NavItem
           key={link.name}
           icon={link.icon}
-          isActive={selectedItem === link.name}
+          isActive={pathname === link.path}
           onClick={() => {
-            setSelectedItem(link.name), redirect(link.path);
+            setSelectedItem(link.path), redirect(link.path);
           }}
         >
           {link.name}

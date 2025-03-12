@@ -60,9 +60,9 @@ export class AuthService {
   async refreshAuth(req: Request): Promise<ReturnAuthDto> {
     const refreshToken = req.cookies.refresh_token;
     // Buscar o refreshToken no banco
-    const [, token] = refreshToken.split(" ");
+    //const [, token] = refreshToken.split(" ");
     const existingUserToken =
-      await this.authRepository.findUserTokenByRefreshToken(token);
+      await this.authRepository.findUserTokenByRefreshToken(refreshToken);
 
     if (!existingUserToken) {
       throw new UnauthorizedException();

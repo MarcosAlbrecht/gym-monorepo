@@ -27,7 +27,10 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 
 export default function Home() {
   const router = useRouter();
-  const { login } = useAuth();
+  const { login, user } = useAuth();
+  if (user) {
+    router.push("/avaliacoes");
+  }
   const {
     register,
     handleSubmit,

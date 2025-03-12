@@ -1,18 +1,13 @@
-import { StorageKeys } from "./storageKeys"; // 🔥 Importando Enum
+import Cookies from "js-cookie";
+import { StorageKeys } from "./storageKeys";
 
 export const storage = {
-  setToken: (token: StorageKeys) =>
-    localStorage.setItem(StorageKeys.TOKEN, token),
-  getToken: () => localStorage.getItem(StorageKeys.TOKEN),
-  removeToken: () => localStorage.removeItem(StorageKeys.TOKEN),
-
-  setRefreshToken: (refreshToken: StorageKeys) =>
-    localStorage.setItem(StorageKeys.REFRESH_TOKEN, refreshToken),
-  getRefreshToken: () => localStorage.getItem(StorageKeys.REFRESH_TOKEN),
-  removeRefreshToken: () => localStorage.removeItem(StorageKeys.REFRESH_TOKEN),
+  setToken: (token: string) =>
+    Cookies.set(StorageKeys.TOKEN, token, { expires: 1 }), // 1 dia de expiração
+  getToken: () => Cookies.get(StorageKeys.TOKEN),
+  removeToken: () => Cookies.remove(StorageKeys.TOKEN),
 
   clearAll: () => {
-    localStorage.removeItem(StorageKeys.TOKEN);
-    localStorage.removeItem(StorageKeys.REFRESH_TOKEN);
+    Cookies.remove(StorageKeys.TOKEN);
   },
 };

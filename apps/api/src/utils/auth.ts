@@ -21,7 +21,7 @@ export const generateToken = (user: User): string => {
     PASSWORD_JWT,
     {
       subject: String(user.id),
-      expiresIn: "10m",
+      expiresIn: "60s",
     }
   );
 };

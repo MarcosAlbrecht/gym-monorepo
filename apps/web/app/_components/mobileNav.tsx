@@ -1,3 +1,4 @@
+import { UserDto } from "@/app/_services/dtos/userDto";
 import {
   Box,
   Flex,
@@ -15,10 +16,11 @@ import {
 import { FiBell, FiChevronDown, FiMenu } from "react-icons/fi";
 
 interface MobileProps {
+  user: UserDto;
   onOpen: () => void;
 }
 
-export default function MobileNav({ onOpen }: MobileProps) {
+export default function MobileNav({ user, onOpen }: MobileProps) {
   return (
     <Flex
       ml={{ base: 0, md: 60 }}
@@ -68,9 +70,9 @@ export default function MobileNav({ onOpen }: MobileProps) {
                   spacing="1px"
                   ml="2"
                 >
-                  <Text fontSize="sm">Justina Clark</Text>
+                  <Text fontSize="sm">{user.nome}</Text>
                   <Text fontSize="xs" color="gray.600">
-                    Admin
+                    {user.perfil}
                   </Text>
                 </VStack>
                 <Box display={{ base: "none", md: "flex" }}>

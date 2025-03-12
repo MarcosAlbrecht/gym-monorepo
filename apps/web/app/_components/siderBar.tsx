@@ -1,5 +1,4 @@
 "use client";
-
 import {
   Box,
   Drawer,
@@ -51,7 +50,7 @@ export default function Sidebar({ children }: SidebarProps) {
       </Drawer>
 
       {/* Navbar Mobile */}
-      <MobileNav onOpen={onOpen} />
+      <MobileNav user={user!} onOpen={onOpen} />
 
       {/* Espaço para o conteúdo da página */}
       <Box ml={{ base: 0, md: 60 }} p="4">

@@ -1,5 +1,6 @@
 "use client";
 import { createContext, useEffect, useState } from "react";
+import Loading from "../_components/loading";
 import api from "../_services/api";
 import { UserDto } from "../_services/dtos/userDto";
 import { storage } from "../_utils/storage";
@@ -17,11 +18,15 @@ export const AuthContext = createContext<AuthContextData | undefined>(
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<UserDto | null>(null);
+  const [isLoading, setIsLoading] = useState(true); // Estado de carregamento
 
   useEffect(() => {
     const token = storage.getToken(); // Pega o token de forma segura
 
-    if (!token) return; // Se não houver token, não busca o usuário
+    if (!token) {
+      setIsLoading(false);
+      return;
+    } // Se não houver token, não busca o usuário
 
     const fetchUser = async () => {
       try {
@@ -30,6 +35,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       } catch (error) {
         console.error("Erro ao buscar usuário", error);
         logout(); // Remove token inválido automaticamente
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -38,12 +45,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const login = async (usuario: string, senha: string) => {
     try {
-      const { token, refresh_token, user } = await api
+      const { token, user } = await api
         .post("/auth", { usuario, senha })
         .then((res) => res.data);
-
+      console.log("dados retornados: ", user);
+      console.log("dados retornados: ", token);
       storage.setToken(token);
-      storage.setRefreshToken(refresh_token);
 
       setUser(user);
     } catch (error) {
@@ -54,10 +61,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const logout = () => {
     storage.removeToken();
-    storage.removeRefreshToken();
     setUser(null);
     window.location.href = "/login"; // Redireciona para login
   };
+
+  if (isLoading) {
+    return <Loading />; // Exibe uma tela de carregamento
+  }
 
   return (
     <AuthContext.Provider

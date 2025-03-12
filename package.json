@@ -11,10 +11,12 @@
     "test": "turbo run test"
   },
   "dependencies": {
+    "js-cookie": "^3.0.5",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
+    "@types/js-cookie": "^3.0.6",
     "prettier": "^3.2.5",
     "turbo": "^2.4.4"
   },
