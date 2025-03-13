@@ -21,13 +21,19 @@ export class UsuarioRepository {
   async findAll(
     skip: number = 0,
     limit: number = 9999999999,
-    userAuth: UserAuthDto
+    userAuth: UserAuthDto,
+    perfil?: PerfilEnum
   ): Promise<User[]> {
     const whereCondition: any = {};
 
-    // Se perfil foi passado, adiciona a condição no where
+    // Se o usuário autenticado for um professor, filtrar pelo ID do professor
     if (userAuth.perfil === PerfilEnum.PROFESSOR) {
       whereCondition.usuario_professor = { id: userAuth.id };
+    }
+
+    // Se o perfil foi passado como parâmetro, adiciona no filtro
+    if (perfil) {
+      whereCondition.perfil = perfil;
     }
     const user = this.repository.find({
       skip,

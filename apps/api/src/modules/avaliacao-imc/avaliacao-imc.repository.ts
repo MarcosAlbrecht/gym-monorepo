@@ -41,6 +41,7 @@ export class AvaliacaoImcRepository {
         usuario_aluno: true,
         usuario_avaliacao: true,
       },
+      order: { dtInclusao: "DESC" },
     });
     return user;
   }

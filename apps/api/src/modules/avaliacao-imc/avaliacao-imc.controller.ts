@@ -74,6 +74,20 @@ const updateAvaliacaoImc = async (
   res.status(200).json(avaliacao);
 };
 
+const deleteAvaliacaoImc = async (
+  req: Request<undefined, undefined, CreateAvaliacaoImcDto>,
+  res: Response
+): Promise<void> => {
+  const avaliacaoImcService = new AvaliacaoImcService(); // Instanciando o serviço UserService
+  const avaliacao = await avaliacaoImcService
+    .deleteAvaliacaoImc(req)
+    .catch((error) => {
+      new ReturnError(res, error);
+    });
+
+  res.status(200).json(avaliacao);
+};
+
 avaliacaoRoute.use(authMiddleware);
 avaliacaoRoute.get("/", findAll);
 avaliacaoRoute.get("/:idAvaliacao", findAvaliacaoById);
@@ -89,5 +103,7 @@ avaliacaoRoute.put(
   validate(avaliacaoImcSchema),
   updateAvaliacaoImc
 );
+
+avaliacaoRoute.delete("/:idAvaliacao", deleteAvaliacaoImc);
 
 export default avaliacaoRoute;

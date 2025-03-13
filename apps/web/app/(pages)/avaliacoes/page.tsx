@@ -4,9 +4,11 @@ import SearchBar from "@/app/_components/searchBar";
 import Sidebar from "@/app/_components/siderBar";
 import UpsertAvaliacaoDialog from "@/app/_components/upsertAvaliacaoDialog";
 import { useAuth } from "@/app/_hooks/useAuth";
+import { PerfilEnum } from "@/app/_services/enums/perfil";
 import { useDisclosure } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
-import { findAvaliacoes } from "./_actions/find";
+
+import { findAvaliacoes } from "@/app/_actions/avaliacao";
 import TableAvaliacao from "./_components/tableAvaliacoes";
 
 export default function Avaliacoes() {
@@ -23,10 +25,12 @@ export default function Avaliacoes() {
   }
   return (
     <Sidebar>
-      <SearchBar
-        onClickPlus={handleClickPlus}
-        buttonText="Cadastrar avaliação"
-      />
+      {user?.perfil !== PerfilEnum.ALUNO && (
+        <SearchBar
+          onClickPlus={handleClickPlus}
+          buttonText="Cadastrar avaliação"
+        />
+      )}
       <TableAvaliacao user={user!} key={"avaliacoes"} avaliacoes={data} />
       <UpsertAvaliacaoDialog
         isOpen={isOpen}

@@ -1,20 +1,19 @@
-import UpsertAvaliacaoDialog from "@/app/_components/upsertAvaliacaoDialog";
-import { ReturnAvaliacaoDto } from "@/app/_services/dtos/return-avaliacao-imc.dto";
+import { ReturnUserDto } from "@/app/_services/dtos/return-user.dto";
 import { UserDto } from "@/app/_services/dtos/userDto";
 import { PerfilEnum } from "@/app/_services/enums/perfil";
 import { HStack, IconButton, useDisclosure } from "@chakra-ui/react";
 import { FiEdit } from "react-icons/fi";
 import DeleteButton from "./deleteButton";
 
-interface AvaliacaoActionsButtonsProps {
-  avaliacao: ReturnAvaliacaoDto;
+interface UsersActionsButtonsProps {
+  users: ReturnUserDto[];
   user: UserDto;
 }
 
-export default function AvaliacaoActionsButtons({
+export default function UsersActionsButtons({
   user,
-  avaliacao,
-}: AvaliacaoActionsButtonsProps) {
+  users,
+}: UsersActionsButtonsProps) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <HStack justifyContent="flex-end" spacing={2}>
@@ -26,15 +25,15 @@ export default function AvaliacaoActionsButtons({
         onClick={onOpen}
       />
       {user.perfil === PerfilEnum.ADMIN && (
-        <DeleteButton key={"deletebutton"} avaliacao={avaliacao} />
+        <DeleteButton key={"deletebutton"} user={user} />
       )}
-      <UpsertAvaliacaoDialog
+      {/* <UpsertAvaliacaoDialog
         isOpen={isOpen}
         onClose={onClose}
-        avaliacao={avaliacao}
+        avaliacao={users}
         title="Editar avaliação"
         onConfirm={() => alert("Confirmado!")}
-      ></UpsertAvaliacaoDialog>
+      ></UpsertAvaliacaoDialog> */}
     </HStack>
   );
 }

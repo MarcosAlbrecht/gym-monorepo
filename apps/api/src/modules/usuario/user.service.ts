@@ -49,12 +49,13 @@ export class UserService {
   }
 
   async findAll(req: Request): Promise<ReturnUserDto[]> {
-    const { skip, limit } = req.query;
+    const { skip, limit, perfil } = req.query;
     const userAuth = await getUserByToken(req);
     const users = await this.userRepository.findAll(
       Number(skip),
       Number(limit),
-      userAuth
+      userAuth,
+      perfil as PerfilEnum
     );
 
     return users.map((user) => new ReturnUserDto(user));

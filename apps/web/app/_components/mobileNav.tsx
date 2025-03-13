@@ -14,6 +14,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { FiBell, FiChevronDown, FiMenu } from "react-icons/fi";
+import { useAuth } from "../_hooks/useAuth";
 
 interface MobileProps {
   user: UserDto;
@@ -21,6 +22,7 @@ interface MobileProps {
 }
 
 export default function MobileNav({ user, onOpen }: MobileProps) {
+  const { logout } = useAuth();
   return (
     <Flex
       ml={{ base: 0, md: 60 }}
@@ -87,7 +89,7 @@ export default function MobileNav({ user, onOpen }: MobileProps) {
               <MenuItem>Profile</MenuItem>
 
               <MenuDivider />
-              <MenuItem>Sign out</MenuItem>
+              <MenuItem onClick={logout}>Sign out</MenuItem>
             </MenuList>
           </Menu>
         </Flex>

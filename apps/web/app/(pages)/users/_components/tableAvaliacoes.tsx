@@ -1,4 +1,4 @@
-import { ReturnAvaliacaoDto } from "@/app/_services/dtos/return-avaliacao-imc.dto";
+import { ReturnUserDto } from "@/app/_services/dtos/return-user.dto";
 import { UserDto } from "@/app/_services/dtos/userDto";
 import {
   Table,
@@ -10,17 +10,14 @@ import {
   Thead,
   Tr,
 } from "@chakra-ui/react";
-import AvaliacaoActionsButtons from "./avaliacaoActionButtons";
+import UsersActionsButtons from "./usersActionButtons";
 
-interface TableAvaliacaoProps {
-  avaliacoes?: ReturnAvaliacaoDto[];
+interface TableUsersProps {
+  users?: ReturnUserDto[];
   user: UserDto;
 }
 
-export default function TableAvaliacao({
-  user,
-  avaliacoes,
-}: TableAvaliacaoProps) {
+export default function TableUsers({ user, users }: TableUsersProps) {
   return (
     <TableContainer border={"1px"} rounded={"lg"} borderColor={"gray.400"}>
       <Table variant="simple">
@@ -32,22 +29,21 @@ export default function TableAvaliacao({
             <Th>IMC</Th>
             <Th>Classificação</Th>
             <Th>Professor</Th>
-            <Th>Aluno</Th>
             <Th isNumeric></Th>
           </Tr>
         </Thead>
         <Tbody>
-          {avaliacoes?.map((avaliacao) => (
+          {users?.map((avaliacao) => (
             <Tr>
-              <Td>{avaliacao.altura}</Td>
-              <Td>{avaliacao.peso}</Td>
-              <Td>{avaliacao.imc}</Td>
-              <Td>{avaliacao.classificacao}</Td>
-              <Td>{avaliacao.usuario_avaliacao.nome}</Td>
-              <Td>{avaliacao.usuario_aluno.nome}</Td>
+              <Td>{avaliacao.nome}</Td>
+              <Td>{avaliacao.usuario}</Td>
+              <Td>{avaliacao.perfil}</Td>
+              <Td>{avaliacao.situacao}</Td>
+              <Td>{avaliacao.usuario_professor?.nome}</Td>
+
               <Td>
                 {/* Alinha os botões à direita */}
-                <AvaliacaoActionsButtons avaliacao={avaliacao} user={user} />
+                <UsersActionsButtons user={user} users={users} />
               </Td>
             </Tr>
           ))}

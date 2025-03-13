@@ -1,5 +1,6 @@
 "use client";
 import { useAuth } from "@/app/_hooks/useAuth";
+import { authUserSchema } from "@/app/_services/schemas/auth-schema";
 import {
   Box,
   Button,
@@ -17,13 +18,7 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-// Esquema de validação com Zod
-const loginSchema = z.object({
-  usuario: z.string().min(1, "Usuário é obrigatório"),
-  password: z.string().min(6, "A senha deve ter pelo menos 6 caracteres"),
-});
-
-type LoginFormValues = z.infer<typeof loginSchema>;
+type LoginFormValues = z.infer<typeof authUserSchema>;
 
 export default function Home() {
   const router = useRouter();
@@ -36,12 +31,11 @@ export default function Home() {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<LoginFormValues>({
-    resolver: zodResolver(loginSchema),
+    resolver: zodResolver(authUserSchema),
   });
 
   const mutation = useMutation({
-    mutationFn: ({ usuario, password }: LoginFormValues) =>
-      login(usuario, password),
+    mutationFn: ({ usuario, senha }: LoginFormValues) => login(usuario, senha),
     onSuccess: (data) => {
       //login(data);
       console.log("sucesso no login: ");
@@ -67,10 +61,10 @@ export default function Home() {
                 <Input type="text" {...register("usuario")} />
                 <FormErrorMessage>{errors.usuario?.message}</FormErrorMessage>
               </FormControl>
-              <FormControl id="password" isInvalid={!!errors.password}>
+              <FormControl id="password" isInvalid={!!errors.senha}>
                 <FormLabel>Senha</FormLabel>
-                <Input type="password" {...register("password")} />
-                <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
+                <Input type="password" {...register("senha")} />
+                <FormErrorMessage>{errors.senha?.message}</FormErrorMessage>
               </FormControl>
               <Stack spacing={10}>
                 <Button

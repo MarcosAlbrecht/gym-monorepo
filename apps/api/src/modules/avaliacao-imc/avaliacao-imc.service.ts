@@ -19,6 +19,7 @@ export class AvaliacaoImcService {
   async createAvaliacaoImc(req: Request): Promise<any> {
     const { altura, peso } = req.body;
     const { idAvaliacao } = req.params;
+    const authorization = req.headers.authorization;
     const userAuth = await getUserByToken(req);
     const resultadoImc = calcularIMC(peso, altura);
 
