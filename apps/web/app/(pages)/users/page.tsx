@@ -28,7 +28,7 @@ export default function Avaliacoes() {
       {user?.perfil !== PerfilEnum.ALUNO && (
         <SearchBar
           onClickPlus={handleClickPlus}
-          buttonText="Cadastrar avaliação"
+          buttonText="Cadastrar usuario"
         />
       )}
       <TableUsers user={user!} key={"avaliacoes"} users={data} />

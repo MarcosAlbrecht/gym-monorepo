@@ -76,7 +76,7 @@ export default function UpsertUserDialog({
     mutationFn: (data: FormUserSchema) =>
       upsertUser({
         ...data,
-        id: userProps?.id ?? undefined, // Garante que id seja passado se existir
+        id: userProps?.id ?? "", // Garante que id seja passado se existir
       }),
     onSuccess: (data) => {
       //login(data);

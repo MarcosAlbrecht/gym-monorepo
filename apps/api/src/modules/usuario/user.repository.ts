@@ -1,4 +1,4 @@
-import { Repository } from "typeorm";
+import { Not, Repository } from "typeorm";
 import { dataSource } from "../../database/data-source";
 
 import { PerfilEnum } from "../../enums/perfil";
@@ -24,7 +24,9 @@ export class UsuarioRepository {
     userAuth: UserAuthDto,
     perfil?: PerfilEnum
   ): Promise<User[]> {
-    const whereCondition: any = {};
+    const whereCondition: any = {
+      id: Not(userAuth.id),
+    };
 
     // Se o usuário autenticado for um professor, filtrar pelo ID do professor
     if (userAuth.perfil === PerfilEnum.PROFESSOR) {
