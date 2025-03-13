@@ -33,17 +33,17 @@ export default function TableUsers({ user, users }: TableUsersProps) {
           </Tr>
         </Thead>
         <Tbody>
-          {users?.map((avaliacao) => (
-            <Tr>
-              <Td>{avaliacao.nome}</Td>
-              <Td>{avaliacao.usuario}</Td>
-              <Td>{avaliacao.perfil}</Td>
-              <Td>{avaliacao.situacao}</Td>
-              <Td>{avaliacao.usuario_professor?.nome}</Td>
+          {users?.map((usr) => (
+            <Tr key={usr.id}>
+              <Td>{usr.nome}</Td>
+              <Td>{usr.usuario}</Td>
+              <Td>{usr.perfil}</Td>
+              <Td>{usr.situacao}</Td>
+              <Td>{usr.usuario_professor?.nome}</Td>
 
               <Td>
                 {/* Alinha os botões à direita */}
-                <UsersActionsButtons user={user} users={users} />
+                <UsersActionsButtons user={user} usr={usr} />
               </Td>
             </Tr>
           ))}

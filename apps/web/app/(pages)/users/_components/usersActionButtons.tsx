@@ -6,13 +6,13 @@ import { FiEdit } from "react-icons/fi";
 import DeleteButton from "./deleteButton";
 
 interface UsersActionsButtonsProps {
-  users: ReturnUserDto[];
+  usr: ReturnUserDto;
   user: UserDto;
 }
 
 export default function UsersActionsButtons({
   user,
-  users,
+  usr,
 }: UsersActionsButtonsProps) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
@@ -25,7 +25,7 @@ export default function UsersActionsButtons({
         onClick={onOpen}
       />
       {user.perfil === PerfilEnum.ADMIN && (
-        <DeleteButton key={"deletebutton"} user={user} />
+        <DeleteButton key={"deletebutton"} user={usr} />
       )}
       {/* <UpsertAvaliacaoDialog
         isOpen={isOpen}
