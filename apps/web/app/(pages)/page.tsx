@@ -1,19 +1,21 @@
 "use client";
 import { Container } from "@chakra-ui/react";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { useAuth } from "../_hooks/useAuth";
 
 export default function page() {
-  const { login, user } = useAuth();
+  const { user } = useAuth();
+  const router = useRouter();
 
-  if (user) {
-    console.log("usuario está logado: ", user);
-    redirect("/avaliacoes");
-  }
-
-  if (!user) {
-    redirect("/login");
-  }
+  useEffect(() => {
+    if (user) {
+      console.log("Usuário está logado:", user);
+      router.push("/avaliacoes");
+    } else {
+      router.push("/login");
+    }
+  }, [user, router]);
 
   return <Container bg={"blue.500"}></Container>;
 }

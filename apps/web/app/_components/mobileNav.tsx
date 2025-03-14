@@ -23,6 +23,7 @@ interface MobileProps {
 
 export default function MobileNav({ user, onOpen }: MobileProps) {
   const { logout } = useAuth();
+
   return (
     <Flex
       ml={{ base: 0, md: 60 }}
@@ -72,9 +73,9 @@ export default function MobileNav({ user, onOpen }: MobileProps) {
                   spacing="1px"
                   ml="2"
                 >
-                  <Text fontSize="sm">{user.nome}</Text>
+                  <Text fontSize="sm">{user?.nome ?? ""}</Text>
                   <Text fontSize="xs" color="gray.600">
-                    {user.perfil}
+                    {user?.perfil ?? ""}
                   </Text>
                 </VStack>
                 <Box display={{ base: "none", md: "flex" }}>

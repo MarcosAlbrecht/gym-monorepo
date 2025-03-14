@@ -9,6 +9,7 @@ import {
 import { redirect, usePathname } from "next/navigation";
 import { useState } from "react";
 import { FiClipboard, FiUser } from "react-icons/fi";
+import { UserDto } from "../_services/dtos/userDto";
 import { PerfilEnum } from "../_services/enums/perfil";
 import NavItem from "./navItem";
 
@@ -38,7 +39,7 @@ export default function SidebarContent({
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
   const pathname = usePathname();
   // Define a role do usuário (padrão: "aluno" se não estiver logado)
-  const userRole = user?.perfil || PerfilEnum.ALUNO;
+  const userRole: PerfilEnum = user?.perfil || PerfilEnum.ALUNO;
 
   return (
     <Box

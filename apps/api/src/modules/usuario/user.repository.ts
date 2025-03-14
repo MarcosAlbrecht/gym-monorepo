@@ -37,6 +37,8 @@ export class UsuarioRepository {
     if (perfil) {
       whereCondition.perfil = perfil;
     }
+    console.log(`FILTRO NO USER ALL: `, whereCondition);
+
     const user = this.repository.find({
       skip,
       take: limit,

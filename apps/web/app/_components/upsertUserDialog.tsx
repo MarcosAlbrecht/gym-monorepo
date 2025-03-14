@@ -52,7 +52,7 @@ export default function UpsertUserDialog({
   const router = useRouter();
   useEffect(() => {
     if (isOpen) {
-      refetch(); // Executa a query quando o modal abre
+      //refetch(); // Executa a query quando o modal abre
     }
   }, [isOpen]);
 
@@ -82,7 +82,7 @@ export default function UpsertUserDialog({
       //login(data);
 
       onClose();
-      router.refresh();
+      //router.refresh();
     },
     onError: (error) => {
       console.error("Erro ao logar:", error);
@@ -109,12 +109,12 @@ export default function UpsertUserDialog({
           <ModalBody>
             <Stack spacing={4}>
               <FormControl id="altura" isInvalid={!!errors.nome}>
-                <FormLabel>Altura em metros</FormLabel>
+                <FormLabel>Nome</FormLabel>
                 <Input type="text" {...register("nome")} />
                 <FormErrorMessage>{errors.nome?.message}</FormErrorMessage>
               </FormControl>
-              <FormControl id="peso" isInvalid={!!errors.usuario}>
-                <FormLabel>Peso</FormLabel>
+              <FormControl id="usuario" isInvalid={!!errors.usuario}>
+                <FormLabel>Usuario</FormLabel>
                 <Input type="text" {...register("usuario")} />
                 <FormErrorMessage>{errors.usuario?.message}</FormErrorMessage>
               </FormControl>

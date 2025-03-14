@@ -44,6 +44,7 @@ export async function findAvaliacoes(): Promise<ReturnAvaliacaoDto[]> {
 
 export async function findAlunos(): Promise<ReturnUserDto[]> {
   try {
+    console.log("buscando usuarios");
     const response = await api.get(
       `/users?skip=0&limit=10&perfil=${PerfilEnum.ALUNO}`
     ); // Usando a instância do Axios

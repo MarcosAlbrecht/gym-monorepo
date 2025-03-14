@@ -10,6 +10,7 @@ interface AuthContextData {
   login: (usuario: string, senha: string) => Promise<void>;
   logout: () => void;
   isAuthenticated: boolean;
+  token?: string;
 }
 
 export const AuthContext = createContext<AuthContextData | undefined>(
@@ -18,6 +19,7 @@ export const AuthContext = createContext<AuthContextData | undefined>(
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<UserDto | null>(null);
+  const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true); // Estado de carregamento
 
   useEffect(() => {
@@ -51,7 +53,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       console.log("dados retornados: ", user);
       console.log("dados retornados: ", token);
       storage.setToken(token);
-
+      setToken(token);
       setUser(user);
     } catch (error) {
       console.error("Erro ao realizar login", error);

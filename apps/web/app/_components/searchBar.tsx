@@ -11,9 +11,14 @@ import { FiPlus, FiSearch } from "react-icons/fi";
 
 interface NavbarProps {
   buttonText: string;
+  enableInputSearch: boolean;
   onClickPlus: () => void;
 }
-export default function SearchBar({ onClickPlus, buttonText }: NavbarProps) {
+export default function SearchBar({
+  enableInputSearch = true,
+  onClickPlus,
+  buttonText,
+}: NavbarProps) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [search, setSearch] = useState("");
 
@@ -34,14 +39,16 @@ export default function SearchBar({ onClickPlus, buttonText }: NavbarProps) {
         mb={4}
       >
         {/* Campo de Pesquisa */}
-        <InputGroup maxW={"3xl"} size="sm">
-          <Input pr="4.5rem" type={"text"} placeholder="Pesquisar" />
-          <InputRightElement width="">
-            <Button h="full" size="sm" onClick={() => {}}>
-              <FiSearch />
-            </Button>
-          </InputRightElement>
-        </InputGroup>
+        {enableInputSearch && (
+          <InputGroup maxW={"3xl"} size="sm">
+            <Input pr="4.5rem" type={"text"} placeholder="Pesquisar" />
+            <InputRightElement width="">
+              <Button h="full" size="sm" onClick={() => {}}>
+                <FiSearch />
+              </Button>
+            </InputRightElement>
+          </InputGroup>
+        )}
 
         {/* Botão que abre o modal */}
         <Button
@@ -49,6 +56,7 @@ export default function SearchBar({ onClickPlus, buttonText }: NavbarProps) {
           colorScheme="blue"
           color={"white"}
           onClick={onClickPlus}
+          ml="auto"
         >
           {buttonText}
         </Button>

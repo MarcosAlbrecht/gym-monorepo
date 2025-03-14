@@ -128,13 +128,13 @@ export default function UpsertAvaliacaoDialog({
                   placeholder="Selecione um aluno"
                   disabled={avaliacao !== undefined} // Desabilita caso já tenha uma avaliação
                 >
-                  {data?.map((user) => (
+                  {data?.map((usr) => (
                     <option
-                      key={user.id}
-                      value={user.id}
-                      selected={avaliacao?.usuario_aluno.id === user.id}
+                      key={usr.id}
+                      value={usr.id}
+                      selected={avaliacao?.usuario_aluno.id === usr.id}
                     >
-                      {user.nome}
+                      {usr.nome}
                     </option>
                   ))}
                 </Select>

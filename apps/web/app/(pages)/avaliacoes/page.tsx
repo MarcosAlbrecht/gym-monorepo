@@ -14,19 +14,20 @@ import TableAvaliacao from "./_components/tableAvaliacoes";
 export default function Avaliacoes() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { user } = useAuth();
+
   const { data } = useQuery({
     queryKey: ["avaliacao"],
     queryFn: findAvaliacoes,
   });
 
   function handleClickPlus() {
-    console.log("clicou");
     onOpen();
   }
   return (
     <Sidebar>
       {user?.perfil !== PerfilEnum.ALUNO && (
         <SearchBar
+          enableInputSearch={true}
           onClickPlus={handleClickPlus}
           buttonText="Cadastrar avaliação"
         />

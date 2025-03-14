@@ -24,10 +24,10 @@ export default function TableUsers({ user, users }: TableUsersProps) {
         <TableCaption>Avaliações de IMC</TableCaption>
         <Thead>
           <Tr>
-            <Th>Altura</Th>
-            <Th>Peso</Th>
-            <Th>IMC</Th>
-            <Th>Classificação</Th>
+            <Th>Aluno</Th>
+            <Th>Usuário</Th>
+            <Th>Prfil</Th>
+            <Th>Status</Th>
             <Th>Professor</Th>
             <Th isNumeric></Th>
           </Tr>

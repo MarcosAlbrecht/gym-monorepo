@@ -15,6 +15,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -23,6 +24,11 @@ type LoginFormValues = z.infer<typeof authUserSchema>;
 export default function Home() {
   const router = useRouter();
   const { login, user } = useAuth();
+  useEffect(() => {
+    if (user) {
+      router.push("/avaliacoes");
+    }
+  }, [user, router]);
   if (user) {
     router.push("/avaliacoes");
   }

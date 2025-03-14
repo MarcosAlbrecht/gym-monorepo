@@ -1,3 +1,4 @@
+import UpsertUserDialog from "@/app/_components/upsertUserDialog";
 import { ReturnUserDto } from "@/app/_services/dtos/return-user.dto";
 import { UserDto } from "@/app/_services/dtos/userDto";
 import { PerfilEnum } from "@/app/_services/enums/perfil";
@@ -11,8 +12,8 @@ interface UsersActionsButtonsProps {
 }
 
 export default function UsersActionsButtons({
-  user,
   usr,
+  user,
 }: UsersActionsButtonsProps) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
@@ -27,13 +28,13 @@ export default function UsersActionsButtons({
       {user.perfil === PerfilEnum.ADMIN && (
         <DeleteButton key={"deletebutton"} user={usr} />
       )}
-      {/* <UpsertAvaliacaoDialog
+      <UpsertUserDialog
         isOpen={isOpen}
         onClose={onClose}
-        avaliacao={users}
-        title="Editar avaliação"
+        userProps={usr}
+        title="Editar usuário"
         onConfirm={() => alert("Confirmado!")}
-      ></UpsertAvaliacaoDialog> */}
+      ></UpsertUserDialog>
     </HStack>
   );
 }
